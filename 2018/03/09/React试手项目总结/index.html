@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="React Redux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="这是FCC上的一个练手项目，涉及到React+Redux+React-Redux+异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候 ，要注意很多问题（作用域的问题，函数参数的问题，this添加等）主要是介绍Redux。Action">
+<meta name="keywords" content="React Redux">
+<meta property="og:type" content="article">
+<meta property="og:title" content="React试手项目总结">
+<meta property="og:url" content="http://pandalord.github.io/2018/03/09/React试手项目总结/index.html">
+<meta property="og:site_name" content="Jacky的博客">
+<meta property="og:description" content="这是FCC上的一个练手项目，涉及到React+Redux+React-Redux+异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候 ，要注意很多问题（作用域的问题，函数参数的问题，this添加等）主要是介绍Redux。Action">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-03-09T08:49:20.366Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="React试手项目总结">
+<meta name="twitter:description" content="这是FCC上的一个练手项目，涉及到React+Redux+React-Redux+异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候 ，要注意很多问题（作用域的问题，函数参数的问题，this添加等）主要是介绍Redux。Action">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://pandalord.github.io/2018/03/09/React试手项目总结/"/>
+
+
+
+
+
+  <title>React试手项目总结 | Jacky的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Jacky的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">初出茅庐，踽踽前行</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://pandalord.github.io/2018/03/09/React试手项目总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Jacky Chen">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Jacky的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">React试手项目总结</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-09T15:09:59+08:00">
+                2018-03-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="这是FCC上的一个练手项目，涉及到React-Redux-React-Redux-异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。"><a href="#这是FCC上的一个练手项目，涉及到React-Redux-React-Redux-异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。" class="headerlink" title="这是FCC上的一个练手项目，涉及到React+Redux+React-Redux+异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。"></a>这是FCC上的一个练手项目，涉及到React+Redux+React-Redux+异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。</h2><h2 id="首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候-，要注意很多问题（作用域的问题，函数参数的问题，this添加等）"><a href="#首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候-，要注意很多问题（作用域的问题，函数参数的问题，this添加等）" class="headerlink" title="首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候 ，要注意很多问题（作用域的问题，函数参数的问题，this添加等）"></a>首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候 ，要注意很多问题（作用域的问题，函数参数的问题，this添加等）</h2><h2 id="主要是介绍Redux。"><a href="#主要是介绍Redux。" class="headerlink" title="主要是介绍Redux。"></a>主要是介绍Redux。</h2><h1 id="Action"><a href="#Action" class="headerlink" title="Action"></a>Action</h1><h2 id="首先，一般的Action就是一个对象字面量。里面包含了一个type-必须）和其他任何你想存放的数据。（但是根据FSA规范，一般只能是4个大类）。而为了方便创造，将一个有参数的函数返回action变成了主要的创建action的方法。这里要注意，因为函数始终是函数，所以有关函数的技巧和方法都能使用，只要最后是返回一个action。其次，可能会有很多样板代码，所以可以写一个创建action的函数来适配一切action-creator会方便很多。"><a href="#首先，一般的Action就是一个对象字面量。里面包含了一个type-必须）和其他任何你想存放的数据。（但是根据FSA规范，一般只能是4个大类）。而为了方便创造，将一个有参数的函数返回action变成了主要的创建action的方法。这里要注意，因为函数始终是函数，所以有关函数的技巧和方法都能使用，只要最后是返回一个action。其次，可能会有很多样板代码，所以可以写一个创建action的函数来适配一切action-creator会方便很多。" class="headerlink" title="首先，一般的Action就是一个对象字面量。里面包含了一个type(必须）和其他任何你想存放的数据。（但是根据FSA规范，一般只能是4个大类）。而为了方便创造，将一个有参数的函数返回action变成了主要的创建action的方法。这里要注意，因为函数始终是函数，所以有关函数的技巧和方法都能使用，只要最后是返回一个action。其次，可能会有很多样板代码，所以可以写一个创建action的函数来适配一切action creator会方便很多。"></a>首先，一般的Action就是一个对象字面量。里面包含了一个type(必须）和其他任何你想存放的数据。（但是根据FSA规范，一般只能是4个大类）。而为了方便创造，将一个有参数的函数返回action变成了主要的创建action的方法。这里要注意，因为函数始终是函数，所以有关函数的技巧和方法都能使用，只要最后是返回一个action。其次，可能会有很多样板代码，所以可以写一个创建action的函数来适配一切action creator会方便很多。</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">makeActionCreator</span>(<span class="params">type, ...argNames</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span>(<span class="params">...args</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">let</span> action = &#123; type &#125;</span><br><span class="line">        argNames.forEach(<span class="function">(<span class="params">arg, index</span>) =&gt;</span> &#123;</span><br><span class="line">            action[argNames[index]] = args[index]</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">return</span> action</span><br><span class="line">&#125;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> ADD_TODO = <span class="string">'ADD_TODO'</span></span><br><span class="line"><span class="keyword">const</span> EDIT_TODO = <span class="string">'EDIT_TODO'</span></span><br><span class="line"><span class="keyword">const</span> REMOVE_TODO = <span class="string">'REMOVE_TODO'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> addTodo = makeActionCreator(ADD_TODO, <span class="string">'todo'</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> editTodo = makeActionCreator(EDIT_TODO, <span class="string">'id'</span>, <span class="string">'todo'</span>)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> removeTodo = makeActionCreator(REMOVE_TODO, <span class="string">'id'</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="而对于action中的异步请求涉及到中间件React-thunk。这个中间件允许你dispatch函数而不是一般的对象字面量。所以可以通过在函数中先dispatch一个action，在return-中再返回一个dispatch，达到异步dispatch不同action的目的。"><a href="#而对于action中的异步请求涉及到中间件React-thunk。这个中间件允许你dispatch函数而不是一般的对象字面量。所以可以通过在函数中先dispatch一个action，在return-中再返回一个dispatch，达到异步dispatch不同action的目的。" class="headerlink" title="而对于action中的异步请求涉及到中间件React thunk。这个中间件允许你dispatch函数而不是一般的对象字面量。所以可以通过在函数中先dispatch一个action，在return 中再返回一个dispatch，达到异步dispatch不同action的目的。"></a>而对于action中的异步请求涉及到中间件React thunk。这个中间件允许你dispatch函数而不是一般的对象字面量。所以可以通过在函数中先dispatch一个action，在return 中再返回一个dispatch，达到异步dispatch不同action的目的。</h2><h2 id="你也可以将一些判断的逻辑放在一个总函数中，再根据情况dispatch对应的action。"><a href="#你也可以将一些判断的逻辑放在一个总函数中，再根据情况dispatch对应的action。" class="headerlink" title="你也可以将一些判断的逻辑放在一个总函数中，再根据情况dispatch对应的action。"></a>你也可以将一些判断的逻辑放在一个总函数中，再根据情况dispatch对应的action。</h2><h1 id="Reducer"><a href="#Reducer" class="headerlink" title="Reducer "></a>Reducer </h1><h2 id="Reducer是连接Action和Store的中间部分，所以在Reducer中需要有两种接口。"><a href="#Reducer是连接Action和Store的中间部分，所以在Reducer中需要有两种接口。" class="headerlink" title="Reducer是连接Action和Store的中间部分，所以在Reducer中需要有两种接口。"></a>Reducer是连接Action和Store的中间部分，所以在Reducer中需要有两种接口。</h2><h2 id="首先Reducer一定是纯函数，也即-prevState-action-gt-newState的形式。其次一般都会将Reducer拆分，不同的reducer负责不同的state部分。最后用combineReducer合并起来。这里的话要注意，Reducer在此时其实就在定义initialState了（在createStore没有传入初始state参数的时候），key的话就是Reducer的函数名，value就是函数参数state的默认值。"><a href="#首先Reducer一定是纯函数，也即-prevState-action-gt-newState的形式。其次一般都会将Reducer拆分，不同的reducer负责不同的state部分。最后用combineReducer合并起来。这里的话要注意，Reducer在此时其实就在定义initialState了（在createStore没有传入初始state参数的时候），key的话就是Reducer的函数名，value就是函数参数state的默认值。" class="headerlink" title="首先Reducer一定是纯函数，也即(prevState,action) =&gt; newState的形式。其次一般都会将Reducer拆分，不同的reducer负责不同的state部分。最后用combineReducer合并起来。这里的话要注意，Reducer在此时其实就在定义initialState了（在createStore没有传入初始state参数的时候），key的话就是Reducer的函数名，value就是函数参数state的默认值。"></a>首先Reducer一定是纯函数，也即(prevState,action) =&gt; newState的形式。其次一般都会将Reducer拆分，不同的reducer负责不同的state部分。最后用combineReducer合并起来。这里的话要注意，Reducer在此时其实就在定义initialState了（在createStore没有传入初始state参数的时候），key的话就是Reducer的函数名，value就是函数参数state的默认值。</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">createReducer</span>(<span class="params">initialState, handlers</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">function</span> <span class="title">reducer</span>(<span class="params">state = initialState, action</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (handlers.hasOwnProperty(action.type)) &#123;</span><br><span class="line">            <span class="keyword">return</span> handlers[action.type](state, action);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> state;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Store"><a href="#Store" class="headerlink" title="Store"></a>Store</h1><h2 id="有必要的话要对createStore进行改造，加入中间件，提供初始参数之类的。"><a href="#有必要的话要对createStore进行改造，加入中间件，提供初始参数之类的。" class="headerlink" title="有必要的话要对createStore进行改造，加入中间件，提供初始参数之类的。"></a>有必要的话要对createStore进行改造，加入中间件，提供初始参数之类的。</h2><h1 id="Containers"><a href="#Containers" class="headerlink" title="Containers"></a>Containers</h1><h2 id="这里需要区别Container和UI组件。Container是带有逻辑的。一般是用connect连接逻辑到组件上，而UI组件只是接受参数的无状态组件。而在Container中要注意生命周期函数，以及具体的需要发送action的函数，将其传给其他组件。"><a href="#这里需要区别Container和UI组件。Container是带有逻辑的。一般是用connect连接逻辑到组件上，而UI组件只是接受参数的无状态组件。而在Container中要注意生命周期函数，以及具体的需要发送action的函数，将其传给其他组件。" class="headerlink" title="这里需要区别Container和UI组件。Container是带有逻辑的。一般是用connect连接逻辑到组件上，而UI组件只是接受参数的无状态组件。而在Container中要注意生命周期函数，以及具体的需要发送action的函数，将其传给其他组件。"></a>这里需要区别Container和UI组件。Container是带有逻辑的。一般是用connect连接逻辑到组件上，而UI组件只是接受参数的无状态组件。而在Container中要注意生命周期函数，以及具体的需要发送action的函数，将其传给其他组件。</h2><h2 id="具体的逻辑一般是两个函数：mapStateToProps和mapDispatchToProps"><a href="#具体的逻辑一般是两个函数：mapStateToProps和mapDispatchToProps" class="headerlink" title="具体的逻辑一般是两个函数：mapStateToProps和mapDispatchToProps."></a>具体的逻辑一般是两个函数：mapStateToProps和mapDispatchToProps.</h2><h2 id="第一个是将state转化为props传递给container。第二个则是将props与dispatch联系。当state有变化时，UI都会被自动重新渲染。"><a href="#第一个是将state转化为props传递给container。第二个则是将props与dispatch联系。当state有变化时，UI都会被自动重新渲染。" class="headerlink" title="第一个是将state转化为props传递给container。第二个则是将props与dispatch联系。当state有变化时，UI都会被自动重新渲染。"></a>第一个是将state转化为props传递给container。第二个则是将props与dispatch联系。当state有变化时，UI都会被自动重新渲染。</h2><h2 id="第一个方法返回的是一个对象，类似props的对象。而第二个返回的则是定义组件如何发送action。它们都可以接受第二个参数，作为ownprops，这样当组件本身参数有变化时，UI组件也会重新渲染。"><a href="#第一个方法返回的是一个对象，类似props的对象。而第二个返回的则是定义组件如何发送action。它们都可以接受第二个参数，作为ownprops，这样当组件本身参数有变化时，UI组件也会重新渲染。" class="headerlink" title="第一个方法返回的是一个对象，类似props的对象。而第二个返回的则是定义组件如何发送action。它们都可以接受第二个参数，作为ownprops，这样当组件本身参数有变化时，UI组件也会重新渲染。"></a>第一个方法返回的是一个对象，类似props的对象。而第二个返回的则是定义组件如何发送action。它们都可以接受第二个参数，作为ownprops，这样当组件本身参数有变化时，UI组件也会重新渲染。</h2><h1 id="UI组件"><a href="#UI组件" class="headerlink" title="UI组件"></a>UI组件</h1><h2 id="就是比较普通的React组件"><a href="#就是比较普通的React组件" class="headerlink" title="就是比较普通的React组件"></a>就是比较普通的React组件</h2><h2 id="Reducer的组织"><a href="#Reducer的组织" class="headerlink" title="Reducer的组织"></a>Reducer的组织</h2><h2 id="大多数应用会处理多种数据类型，通常可以分为以下三类："><a href="#大多数应用会处理多种数据类型，通常可以分为以下三类：" class="headerlink" title="大多数应用会处理多种数据类型，通常可以分为以下三类："></a>大多数应用会处理多种数据类型，通常可以分为以下三类：</h2><pre><code>- 域数据（Domain data）: 应用需要展示、使用或者修改的数据（比如 从服务器检索到的所有 todos
+</code></pre><hr>
+<pre><code>- 应用状态（App state）: 特定于应用某个行为的数据（比如 “Todo #5 是现在选择的状态”，或者 “正在进行一个获取 Todos 的请求”）
+</code></pre><hr>
+<pre><code>- UI 状态（UI state）: 控制 UI 如何展示的数据（比如 “编写 TODO 模型的弹窗现在是展开的”）
+</code></pre><hr>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/React-Redux/" rel="tag"><i class="fa fa-tag"></i> React Redux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/04/这是一篇测试博客/" rel="next" title="这是一篇测试博客">
+                <i class="fa fa-chevron-left"></i> 这是一篇测试博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Jacky Chen" />
+            
+              <p class="site-author-name" itemprop="name">Jacky Chen</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#这是FCC上的一个练手项目，涉及到React-Redux-React-Redux-异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。"><span class="nav-number">1.</span> <span class="nav-text">这是FCC上的一个练手项目，涉及到React+Redux+React-Redux+异步fetch的问题。这里以项目为轴，将具体的涉及到的问题和概念全部记录。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候-，要注意很多问题（作用域的问题，函数参数的问题，this添加等）"><span class="nav-number">2.</span> <span class="nav-text">首先是React。React基本没什么好说的，更多的是类Flux设计模式以及Redux的具体应用。另外就是传递参数的时候，特别是函数类参数的时候 ，要注意很多问题（作用域的问题，函数参数的问题，this添加等）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要是介绍Redux。"><span class="nav-number">3.</span> <span class="nav-text">主要是介绍Redux。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Action"><span class="nav-number"></span> <span class="nav-text">Action</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#首先，一般的Action就是一个对象字面量。里面包含了一个type-必须）和其他任何你想存放的数据。（但是根据FSA规范，一般只能是4个大类）。而为了方便创造，将一个有参数的函数返回action变成了主要的创建action的方法。这里要注意，因为函数始终是函数，所以有关函数的技巧和方法都能使用，只要最后是返回一个action。其次，可能会有很多样板代码，所以可以写一个创建action的函数来适配一切action-creator会方便很多。"><span class="nav-number">1.</span> <span class="nav-text">首先，一般的Action就是一个对象字面量。里面包含了一个type(必须）和其他任何你想存放的数据。（但是根据FSA规范，一般只能是4个大类）。而为了方便创造，将一个有参数的函数返回action变成了主要的创建action的方法。这里要注意，因为函数始终是函数，所以有关函数的技巧和方法都能使用，只要最后是返回一个action。其次，可能会有很多样板代码，所以可以写一个创建action的函数来适配一切action creator会方便很多。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#而对于action中的异步请求涉及到中间件React-thunk。这个中间件允许你dispatch函数而不是一般的对象字面量。所以可以通过在函数中先dispatch一个action，在return-中再返回一个dispatch，达到异步dispatch不同action的目的。"><span class="nav-number">2.</span> <span class="nav-text">而对于action中的异步请求涉及到中间件React thunk。这个中间件允许你dispatch函数而不是一般的对象字面量。所以可以通过在函数中先dispatch一个action，在return 中再返回一个dispatch，达到异步dispatch不同action的目的。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#你也可以将一些判断的逻辑放在一个总函数中，再根据情况dispatch对应的action。"><span class="nav-number">3.</span> <span class="nav-text">你也可以将一些判断的逻辑放在一个总函数中，再根据情况dispatch对应的action。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reducer"><span class="nav-number"></span> <span class="nav-text">Reducer </span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Reducer是连接Action和Store的中间部分，所以在Reducer中需要有两种接口。"><span class="nav-number">1.</span> <span class="nav-text">Reducer是连接Action和Store的中间部分，所以在Reducer中需要有两种接口。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#首先Reducer一定是纯函数，也即-prevState-action-gt-newState的形式。其次一般都会将Reducer拆分，不同的reducer负责不同的state部分。最后用combineReducer合并起来。这里的话要注意，Reducer在此时其实就在定义initialState了（在createStore没有传入初始state参数的时候），key的话就是Reducer的函数名，value就是函数参数state的默认值。"><span class="nav-number">2.</span> <span class="nav-text">首先Reducer一定是纯函数，也即(prevState,action) =&gt; newState的形式。其次一般都会将Reducer拆分，不同的reducer负责不同的state部分。最后用combineReducer合并起来。这里的话要注意，Reducer在此时其实就在定义initialState了（在createStore没有传入初始state参数的时候），key的话就是Reducer的函数名，value就是函数参数state的默认值。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Store"><span class="nav-number"></span> <span class="nav-text">Store</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#有必要的话要对createStore进行改造，加入中间件，提供初始参数之类的。"><span class="nav-number">1.</span> <span class="nav-text">有必要的话要对createStore进行改造，加入中间件，提供初始参数之类的。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Containers"><span class="nav-number"></span> <span class="nav-text">Containers</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#这里需要区别Container和UI组件。Container是带有逻辑的。一般是用connect连接逻辑到组件上，而UI组件只是接受参数的无状态组件。而在Container中要注意生命周期函数，以及具体的需要发送action的函数，将其传给其他组件。"><span class="nav-number">1.</span> <span class="nav-text">这里需要区别Container和UI组件。Container是带有逻辑的。一般是用connect连接逻辑到组件上，而UI组件只是接受参数的无状态组件。而在Container中要注意生命周期函数，以及具体的需要发送action的函数，将其传给其他组件。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#具体的逻辑一般是两个函数：mapStateToProps和mapDispatchToProps"><span class="nav-number">2.</span> <span class="nav-text">具体的逻辑一般是两个函数：mapStateToProps和mapDispatchToProps.</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个是将state转化为props传递给container。第二个则是将props与dispatch联系。当state有变化时，UI都会被自动重新渲染。"><span class="nav-number">3.</span> <span class="nav-text">第一个是将state转化为props传递给container。第二个则是将props与dispatch联系。当state有变化时，UI都会被自动重新渲染。</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#第一个方法返回的是一个对象，类似props的对象。而第二个返回的则是定义组件如何发送action。它们都可以接受第二个参数，作为ownprops，这样当组件本身参数有变化时，UI组件也会重新渲染。"><span class="nav-number">4.</span> <span class="nav-text">第一个方法返回的是一个对象，类似props的对象。而第二个返回的则是定义组件如何发送action。它们都可以接受第二个参数，作为ownprops，这样当组件本身参数有变化时，UI组件也会重新渲染。</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UI组件"><span class="nav-number"></span> <span class="nav-text">UI组件</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#就是比较普通的React组件"><span class="nav-number">1.</span> <span class="nav-text">就是比较普通的React组件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reducer的组织"><span class="nav-number">2.</span> <span class="nav-text">Reducer的组织</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#大多数应用会处理多种数据类型，通常可以分为以下三类："><span class="nav-number">3.</span> <span class="nav-text">大多数应用会处理多种数据类型，通常可以分为以下三类：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Jacky Chen</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
